@@ -19,8 +19,6 @@ public class ChatServer {
         try (ServerSocket connection = new ServerSocket(port)) {
             System.out.println("The server is currently listening on port " + port);
             while (true) {
-                Socket socket = ServerSocket.accept();
-                /*Create a user*/
 
 
             }
