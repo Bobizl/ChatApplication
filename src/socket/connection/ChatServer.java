@@ -9,17 +9,23 @@ import java.util.Set;
 
 public class ChatServer {
     private int port;
-    private Set<String> users = new HashSet<>();
+    private Set<String> userNames = new HashSet<>();
+    private Set<UserThread> userThreads = new HashSet<>();
 
     public ChatServer(int port) {
         this.port = port;
     }
 
     public void execute() {
-        try (ServerSocket connection = new ServerSocket(port)) {
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
             System.out.println("The server is currently listening on port " + port);
             while (true) {
+                Socket socket = serverSocket.accept();
+                System.out.println("New user connected");
 
+                UserThread newUser = new UserThread(socket, this);
+                userThreads.add(newUser);
+                newUser.start();
 
             }
         } catch (IOException ex) {
@@ -40,6 +46,24 @@ public class ChatServer {
         server.execute();
     }
 
-    public void chatBroadcast(String message, User)
-
+    public void chatBroadcast(String message, UserThread excludeUser){
+        for(UserThread aUser : userThreads){
+            if(aUser != excludeUser){
+                aUser.sendMessage(message);
+            }
+        }
+    }
+    void addUserName(String userName){
+        userName.add(userName);
+    }
+ void removeUser(String userName, UserThread aUser){
+        boolean removed = userNames.remove(userName);
+        if(removed){
+            userThreads.remove(aUser);
+            System.out.println("The user "+ userName + "quitted");
+        }
+ }
+ Set<String> getUserNames(){
+        return this.userNames;
+ }
 }
